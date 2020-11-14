@@ -38,3 +38,37 @@ body {
   color: white;
   text-decoration: none;
 }
+
+.dataset {
+  margin-left: 20pt;
+  cursor: pointer;
+}
+.dataset-icon {
+  margin-left: 20pt;
+  border-radius: 5px;
+  background-color: rgb(113, 116, 114);
+  cursor: pointer;
+  align-items: center;
+}
+.row {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+}
+.col-sm-3 {
+  height: 100vh;
+  background-color: rgb(219, 230, 222);
+  width: 10%;
+  position: relative;
+}
+
+.col-sm-9 {
+  height: 100vh;
+  width: 90%;
+  background-color: rgb(241, 238, 238);
+  display: flex;
+  position: relative;
+  overflow-y: auto;
+  flex-direction: column;
+  overflow-x: hidden;
+}
