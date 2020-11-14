@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import Header from "../../components/NavBar/NavBar";
-import Api from "../Api/Api";
+import SideBarLeft from "../SideBar/SideBar";
 function MainPage() {
   return (
     <>
@@ -12,7 +12,7 @@ function MainPage() {
       </div>
       <div className="main-page">
         <div className="row">
-          <Api />
+          <SideBarLeft />
         </div>
       </div>
     </>

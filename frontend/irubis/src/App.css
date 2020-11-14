@@ -39,17 +39,6 @@ body {
   text-decoration: none;
 }
 
-.dataset {
-  margin-left: 20pt;
-  cursor: pointer;
-}
-.dataset-icon {
-  margin-left: 20pt;
-  border-radius: 5px;
-  background-color: rgb(113, 116, 114);
-  cursor: pointer;
-  align-items: center;
-}
 .row {
   height: 100vh;
   width: 100%;
@@ -58,17 +47,40 @@ body {
 .col-sm-3 {
   height: 100vh;
   background-color: rgb(219, 230, 222);
-  width: 10%;
+  width: 20%;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .col-sm-9 {
   height: 100vh;
-  width: 90%;
+  width: 80%;
   background-color: rgb(241, 238, 238);
   display: flex;
   position: relative;
   overflow-y: auto;
   flex-direction: column;
   overflow-x: hidden;
+}
+/* .dataset {
+  cursor: pointer;
+} */
+.dataset-icon {
+  border-radius: 5px;
+  background-color: rgb(113, 116, 114);
+  cursor: pointer;
+  align-items: center;
+}
+.date-picker {
+  width: 100%;
+}
+
+.btn-session {
+  border-radius: 0%;
+  width: 100%;
+}
+.daily-data-btn {
+  width: 90%;
 }
