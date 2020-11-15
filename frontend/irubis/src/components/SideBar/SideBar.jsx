@@ -15,6 +15,7 @@ function SideBarLeft() {
   }, []);
 
   const handleFileClick = (index) => {
+    console.log(index);
     let testName = fileNames[index];
     setTestName(testName);
     const data = { filename: testName };
@@ -26,7 +27,7 @@ function SideBarLeft() {
 
   return (
     <>
-      <div className="col-sm-3">
+      <div className="col-sm-2">
         <h4>Select Data File</h4>
         {fileNames &&
           fileNames.map((file, index) => (
@@ -39,7 +40,7 @@ function SideBarLeft() {
             </Button>
           ))}
       </div>
-      <div className="col-sm-9">
+      <div className="col-sm-10">
         {testData && <Dashboard testData={testData} testName={testName} />}
       </div>
     </>

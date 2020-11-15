@@ -36,19 +36,22 @@ def get_data_files():
 
 @app.route('/read_data', methods=['POST'])
 def read_data():
+    print(request)
     post_data = request.get_json()
     filename = post_data.get("filename")
     full_file_path = FOLDER_PATH+filename
     with h5py.File(full_file_path, 'r') as f:
         data = f['internal']
-        glucose = np.array(data['glucose'])
+        glucose = np.array(data['glucose']).tolist()
         measurement =  np.array(data['measurement'])
-        time =  np.array(data['time'])
+        row_mean_measurement = np.mean(measurement, axis = 1).tolist()
+        time =  np.array(data['time']).tolist()
     data = {
-        'glucose':  json.dumps([i[0] for i in glucose], cls=NumpyEncoder),
-        # 'measurement' :  [i[0] for i in measurement],
-        'time' :  json.dumps([i[0] for i in time], cls=NumpyEncoder)
+        'glucose':  [i[0] for i in glucose],
+        'measurement' :  [i for i in row_mean_measurement],
+        'time' :  [i[0] for i in time]
     }
+    
     return jsonify(status = True, data = data)
 
    

@@ -60,7 +60,7 @@ body {
   background-color: rgb(241, 238, 238);
   display: flex;
   position: relative;
-  overflow-y: auto;
+  overflow-y: hidden;
   flex-direction: column;
   overflow-x: hidden;
 }
@@ -73,9 +73,6 @@ body {
   cursor: pointer;
   align-items: center;
 }
-.date-picker {
-  width: 100%;
-}
 
 .btn-session {
   border-radius: 0%;
@@ -84,3 +81,27 @@ body {
 .daily-data-btn {
   width: 90%;
 }
+
+/* .graph-div {
+  width: 35%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+} */
+
+/* js-plotly-plot .plotly {
+  position: relative;
+  height: 450px;
+}
+.svg-container {
+  position: relative;
+  height: 450px;
+}
+
+.main-svg {
+  position: relative;
+  height: 450px;
+}
+.plot-container {
+  position: relative;
+  height: 450px;
+} */
