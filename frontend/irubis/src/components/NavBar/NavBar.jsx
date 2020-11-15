@@ -1,9 +1,6 @@
 import React from "react";
-
 import { NavLink } from "react-router-dom";
-import { Container, Navbar, Nav } from "react-bootstrap";
-
-// import "./NavBar.scss";
+import { Container, Navbar } from "react-bootstrap";
 
 function Header() {
   return (

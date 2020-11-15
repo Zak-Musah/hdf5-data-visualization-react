@@ -1,19 +1,17 @@
 import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import Header from "../../components/NavBar/NavBar";
-import SideBarLeft from "../SideBar/SideBar";
+
+import Dashboard from "../Dashboard/Dashboard";
+
 function MainPage() {
   return (
     <>
-      <div className="nav-bar">
-        <Router>
-          <Header />
-        </Router>
-      </div>
-      <div className="main-page">
-        <div className="row">
-          <SideBarLeft />
-        </div>
+      <nav className="navbar navbar-light sticky-top bg-light">
+        <a className="navbar-brand" href="#">
+          <strong>IRUBIS ANALYTICS DASHBOARD</strong>
+        </a>
+      </nav>
+      <div className="row">
+        <Dashboard />
       </div>
     </>
   );

@@ -44,7 +44,7 @@ body {
   width: 100%;
   display: flex;
 }
-.col-sm-3 {
+/* .col-sm-3 {
   height: 100vh;
   background-color: rgb(219, 230, 222);
   width: 20%;
@@ -63,7 +63,7 @@ body {
   overflow-y: hidden;
   flex-direction: column;
   overflow-x: hidden;
-}
+} */
 /* .dataset {
   cursor: pointer;
 } */
@@ -81,12 +81,6 @@ body {
 .daily-data-btn {
   width: 90%;
 }
-
-/* .graph-div {
-  width: 35%;
-  margin-top: 20px;
-  margin-bottom: 20px;
-} */
 
 /* js-plotly-plot .plotly {
   position: relative;

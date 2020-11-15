@@ -1,126 +1,102 @@
-import React, { useEffect, useState } from "react";
-import Plot from "react-plotly.js";
-import { chartStyling, Labels } from "../Helpers/Constants";
-function Dashboard({ testData, testName }) {
-  const [dataToPlot, setDataTop] = useState([]);
+import React, { useState, useEffect } from "react";
+import { Spinner } from "react-bootstrap";
+import axios from "axios";
+
+import Chart from "../Chart/Chart";
+
+function Dashboard(props) {
+  const [fileNames, setFileNames] = useState([]);
+  const [fileName, setFileName] = useState("");
+  const [fileData, setFileData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (Object.keys(testData).length > 0) {
-      const data = testData.data;
-      console.log(data);
-      const time = data.time;
-      console.log(time);
-      const glucose = data.glucose;
-      const measurement = data.measurement;
-      const arrayOfObjects = [
-        { xaxis: time, yaxais: glucose },
-        { xaxis: time, yaxais: measurement },
-      ];
-      setDataTop(arrayOfObjects);
-    }
-  }, [testData]);
+    axios
+      .get(`http://localhost:5000/get_file_names`)
+      .then((response) => {
+        if (response.data.status === true) {
+          setFileNames(response.data.data);
+        } else {
+          setFileNames([]);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const fetchData = (index) => {
+    const name = fileNames[index];
+    setFileName(name);
+    setLoading(true);
+    const data = { file_name: name };
+    axios
+      .post(`http://localhost:5000/read_data`, data)
+      .then((response) => {
+        if (response.data.status === true) {
+          setFileData(response.data.data);
+        } else {
+          setFileData([]);
+        }
+        setLoading(false);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const clearDashboard = () => {
+    setFileData([]);
+    setFileName("");
+  };
+
   return (
     <>
-      {dataToPlot.length > 0 &&
-        Labels &&
-        dataToPlot.map((obj, i) => (
-          <Plot
-            data={[
-              {
-                x: obj.xaxis,
-                y: obj.yaxais,
-                type: "date",
-                mode: "line",
-
-                line: {
-                  width: 3,
-                  color: "#e6347d",
-                },
-                hoverinfo: "closest",
-              },
-            ]}
-            layout={{
-              autosize: true,
-              showlegend: false,
-              showgrid: true,
-              gridcolor: chartStyling.gridcolor,
-              textColor: chartStyling.textColor,
-              title: Labels[i]["title"][testName],
-              height: chartStyling.height,
-              titlefont: {
-                size: chartStyling.size,
-                color: chartStyling.textColor,
-              },
-              tickfont: {
-                size: chartStyling.size,
-                color: chartStyling.textColor,
-              },
-
-              plot_bgcolor: chartStyling.bgColor,
-              paper_bgcolor: chartStyling.bgColor,
-              border_radius: chartStyling.borderRadius,
-              displayModeBar: false,
-              margin: {
-                l: chartStyling.marginLeft,
-                t: chartStyling.marginTop,
-                r: chartStyling.marginRight,
-                b: chartStyling.marginBottom,
-              },
-
-              xaxis: {
-                automargin: true,
-                showgrid: true,
-                gridcolor: chartStyling.gridcolor,
-                mirror: chartStyling.mirrorTicks,
-                showline: true,
-                linecolor: chartStyling.lineColor,
-                rangeslider: {},
-                rangeselector: Labels[i],
-                tickfont: {
-                  size: chartStyling.size,
-                  color: chartStyling.textColor,
-                },
-                showline: true,
-                linecolor: chartStyling.lineColor,
-                title: {
-                  text: Labels[i]["xLabel"],
-                  font: {
-                    size: chartStyling.size,
-                    color: chartStyling.textColor,
-                  },
-                },
-              },
-              yaxis: {
-                showgrid: true,
-                automargin: true,
-                gridcolor: chartStyling.gridcolor,
-                mirror: chartStyling.mirrorTicks,
-                showline: true,
-                linecolor: chartStyling.lineColor,
-                fixedrange: true,
-                tickfont: {
-                  size: chartStyling.size,
-                  color: chartStyling.textColor,
-                },
-                showline: true,
-                linecolor: chartStyling.lineColor,
-                title: {
-                  text: Labels[i]["yLabel"],
-                  font: {
-                    size: chartStyling.size,
-                    color: chartStyling.textColor,
-                  },
-                },
-              },
-            }}
-            config={{
-              responsive: true,
-              useResizeHandler: true,
-              displaylogo: false,
-              displayModeBar: true,
-            }}
-          />
-        ))}
+      <div className="col-2 bg-light card">
+        <div className="card-body">
+          <h5 className="card-title">Select File</h5>
+          <h6 className="card-subtitle mb-2 text-muted">
+            To show dataset on dashboard
+          </h6>
+          <div className="list-group">
+            {fileNames &&
+              fileNames.map((fileName, index) => (
+                <button
+                  type="button"
+                  className="list-group-item list-group-item-action"
+                  onClick={() => fetchData(index)}
+                  key={index}
+                >
+                  {fileName.slice(0, -5).toUpperCase()}
+                </button>
+              ))}
+            <button
+              onClick={() => clearDashboard()}
+              className="btn btn-primary"
+              type="button"
+            >
+              Clear Dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="col bg-light card">
+        <div className="card-body">
+          {loading && (
+            <center>
+              <Spinner animation="border" role="status">
+                <span className="sr-only">Loading...</span>
+              </Spinner>
+            </center>
+          )}
+          {!loading && fileName.length > 0 ? (
+            <>
+              <h4 className="card-title">
+                {fileName.slice(0, -5).toUpperCase()}
+              </h4>
+              <Chart fileData={fileData} fileName={fileName} />
+            </>
+          ) : (
+            <h4 className="card-title">No data yet...</h4>
+          )}
+        </div>
+      </div>
     </>
   );
 }
