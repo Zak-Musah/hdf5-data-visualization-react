@@ -43,6 +43,7 @@ The goal of this task is to programmaticaly extract data from files and plot two
   - [Backend](#backend-1)
   - [Frontend](#frontend-1)
 - [EndPoints](#endpoints)
+- [Screenshots](#screenshots)
 
 ## Quick Start
 
@@ -57,7 +58,7 @@ cd hdf5-data-visualization-react
 
 ```
 
-- Docker should be installed before running the start command
+- Docker/Docker Compose should be installed before running the start command
 - 3 docker containers were used - Backend (Python) , Frontend (Node) and Nginx
 
 - To start both backend and frontend and run tests using local docker client, run the following from root of application:
