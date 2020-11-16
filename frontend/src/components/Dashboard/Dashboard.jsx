@@ -78,7 +78,7 @@ function Dashboard(props) {
         </div>
       </div>
       <div className="col bg-light card">
-        <div className="card-body" style={{ paddingLeft: "20%" }}>
+        <div className="card-body" style={{ paddingLeft: "20%"}}>
           {loading && (
             <center>
               <Spinner animation="border" role="status">

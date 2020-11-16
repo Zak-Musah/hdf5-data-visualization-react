@@ -14,8 +14,6 @@ sleep 20
 docker-compose exec backend python manage.py test
 >&2 echo "Backend api tests done..."
 
-docker-compose exec frontend npm test -u
->&2 echo "Frontend tests done..."
 
 >&2 echo "IRUBIS ANALYTICS DASHBOARD is now ready at http://localhost"
 sleep 10

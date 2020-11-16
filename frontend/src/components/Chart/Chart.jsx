@@ -68,7 +68,7 @@ function Chart({ fileData }) {
                   b: chartStyling.marginBottom,
                 },
                 width: 800,
-                height: 400,
+                height: 350,
                 xaxis: {
                   automargin: true,
                   showgrid: true,
