@@ -95,29 +95,19 @@ npm start [Automatically launches app in your default browser on http://localhos
 ## Backend
 
 - Python v3.8.6
--
 - Flask v1.1.2
--
 - Docker v19.03.1
-
 - Docker Compose v1.21.0
-
 - Docker Compose file v3.3
-
 - Nginx v1.15.9
-
 - Guicorn v19.9.0
 
 ## Frontend
 
 - Node v12.18.3
-
 - Npm v6.14.7
-
 - React v16.14.0
-
 - React Scripts v2.1.8
-
 - React Dom v16.14.0
 
 # Dependencies
@@ -125,25 +115,17 @@ npm start [Automatically launches app in your default browser on http://localhos
 ## Backend
 
 - Flask Testing v0.8.0 - For unit testing within flask
--
 - h5py v3.1.0 - For extracting of big data from HDF5 binary data format
--
 - numpy v1.19.4 To structure multi-dimensional data extracted by h5py into numpy matrices for data aggregation
-
 - Coverage v5.3 - For checking coverage of code tested
--
 - Flask CORS v3.0.9 - To allow for cross-origin AJAX requests
--
 - tzlocal v2.1 - To convert unix timestamps to local timezone
 
 ## Frontend
 
 - Axios v0.18.1 - For making AJAX calls to the server(backend)
-
 - react-bootstrap v1.4.0 - For app CSS styling and loading spinner
-
 - React-PlotlyJS/PlotlyJS v2.4.0/1.45.3 - For charts shown on dashboard
-
 - Enzyme v3.9.0 - Utility library used for testing react components
 
 # EndPoints
