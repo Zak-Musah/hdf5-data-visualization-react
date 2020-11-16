@@ -13,8 +13,8 @@ function Chart({ fileData }) {
       const glucose = data.glucose;
       const measurement = data.measurement;
       const chartsObject = [
-        { xaxis: time, yaxais: glucose, title: "Glucose" },
-        { xaxis: time, yaxais: measurement, title: "Mean Wavenumber" },
+        { xaxis: time, yaxais: glucose, title: "Glucose Dataset" },
+        { xaxis: time, yaxais: measurement, title: "Measurement Dataset" },
       ];
       setDataTop(chartsObject);
     }
@@ -25,7 +25,7 @@ function Chart({ fileData }) {
       {dataToPlot.length > 0 &&
         Labels &&
         dataToPlot.map((obj, i) => (
-          <div className="col">
+          <div className="col-12">
             <Plot
               data={[
                 {
@@ -48,7 +48,6 @@ function Chart({ fileData }) {
                 gridcolor: chartStyling.gridcolor,
                 textColor: chartStyling.textColor,
                 title: obj.title,
-                height: chartStyling.height,
                 titlefont: {
                   size: chartStyling.size,
                   color: chartStyling.textColor,
@@ -68,7 +67,8 @@ function Chart({ fileData }) {
                   r: chartStyling.marginRight,
                   b: chartStyling.marginBottom,
                 },
-                width: 650,
+                width: 800,
+                height: 400,
                 xaxis: {
                   automargin: true,
                   showgrid: true,

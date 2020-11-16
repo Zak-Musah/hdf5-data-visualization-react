@@ -48,7 +48,7 @@ function Dashboard(props) {
 
   return (
     <>
-      <div className="col-2 bg-light card">
+      <div className="col-3 bg-light card">
         <div className="card-body">
           <h5 className="card-title">Select File</h5>
           <h6 className="card-subtitle mb-2 text-muted">
@@ -78,7 +78,7 @@ function Dashboard(props) {
         </div>
       </div>
       <div className="col bg-light card">
-        <div className="card-body">
+        <div className="card-body" style={{ paddingLeft: "20%" }}>
           {loading && (
             <center>
               <Spinner animation="border" role="status">
