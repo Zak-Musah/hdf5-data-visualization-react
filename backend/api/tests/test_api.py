@@ -8,7 +8,7 @@ class TestAPIService(BaseTestCase):
 
     def test_sanity(self):
         """Ensure the api behaves correctly"""
-        response = self.client.get("/test")
+        response = self.client.get("/api/test")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 200)
         self.assertIn("Success", data["message"])
@@ -17,7 +17,7 @@ class TestAPIService(BaseTestCase):
     
     def test_get_file_names(self):
         """Test api service return valid file names"""
-        response = self.client.get("/get_file_names")
+        response = self.client.get("/api/get_file_names")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 200)
         self.assertIsNotNone(data["data"])
@@ -28,7 +28,7 @@ class TestAPIService(BaseTestCase):
     def test_read_data_invalid_file_name(self):
         """Test api service return invalid file data"""
         response = self.client.post(
-            "/read_data",
+            "/api/read_data",
             data=json.dumps({}),
             content_type="application/json"
         )
@@ -41,7 +41,7 @@ class TestAPIService(BaseTestCase):
     def test_read_data_valid_file_name(self):
         """Test api service return valid file data"""
         response = self.client.post(
-            "/read_data",
+            "/api/read_data",
             data=json.dumps({
                 "file_name" : "test_dataset_1.hdf5"
             }),

@@ -12,7 +12,7 @@ function Dashboard(props) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/get_file_names`)
+      .get(`${process.env.REACT_APP_BACKEND_SERVICE_URL}/api/get_file_names`)
       .then((response) => {
         if (response.data.status === true) {
           setFileNames(response.data.data);
@@ -29,7 +29,7 @@ function Dashboard(props) {
     setLoading(true);
     const data = { file_name: name };
     axios
-      .post(`http://localhost:5000/api/read_data`, data)
+      .post(`${process.env.REACT_APP_BACKEND_SERVICE_URL}/api/read_data`, data)
       .then((response) => {
         if (response.data.status === true) {
           setFileData(response.data.data);

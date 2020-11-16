@@ -8,11 +8,10 @@ import glob
 import h5py
 import tzlocal
 
-cors = CORS()
 
 app = Flask(__name__)
-cors.init_app(app)
-FOLDER_PATH = "dataset/"
+cors = CORS(app, resources={r"/*": {"origins": "http://localhost"}})
+FOLDER_PATH = "/usr/src/app/dataset/" # change directory here for correct path to dataset - without docker
 
 
 @app.route("/api/test")
@@ -34,7 +33,7 @@ def read_data():
     post_data = request.get_json()
     file_name = post_data.get("file_name")
     if file_name:
-        full_file_path = "../"+FOLDER_PATH + file_name
+        full_file_path = FOLDER_PATH + file_name
         with h5py.File(full_file_path, 'r') as f:
             data = f['internal']
             glucose = np.array(data['glucose']).tolist()

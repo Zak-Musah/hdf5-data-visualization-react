@@ -72,7 +72,7 @@ sh ./start.sh
 chmod 400 start.sh
 ```
 
-- To run project without docker , follow these steps;
+- To run project without docker , follow these steps; Also change correct path of dataset folder in backend/api/**init**.py
 
 ```bash
 cd backend
@@ -80,6 +80,7 @@ python3 -m venv env [Create a python environment]
 source env/bin/activate
 (env) pip install -r requirements.txt
 (env) export FLASK_APP=api/__init__.py
+(env) export REACT_APP_BACKEND_SERVICE_URL=http://localhost:5000
 (env) python manage.py run [Navigate to http://localhost:5000/api/test for sanity check]
 
 
