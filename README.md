@@ -146,12 +146,12 @@ You can test out the following endpoints:
 
 ## When App First Renders
 
-![Image](Screenshots/1.png?raw=true "1")
+![Image](screenshots/1.png?raw=true "1")
 
 ## Dataset-1
 
-![Image](Screenshots/2.png?raw=true "2")
+![Image](screenshots/2.png?raw=true "2")
 
 ## Dataset-2
 
-![Image](Screenshots/3.png?raw=true "3")
+![Image](screenshots/3.png?raw=true "3")
