@@ -15,11 +15,11 @@ export const chartStyling = {
 
 export const Labels = [
   {
-    xLabel: "Time",
+    xLabel: "Time ",
     yLabel: "Glucose",
   },
   {
-    xLabel: "Time [s]",
+    xLabel: "Data Samples",
     yLabel: "Wavenumber [cm-1]",
   },
 ];

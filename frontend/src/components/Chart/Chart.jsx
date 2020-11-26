@@ -1,126 +1,246 @@
 import React, { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
+import axios from "axios";
 
 import { chartStyling, Labels } from "../Helpers/Constants";
 
-function Chart({ fileData }) {
-  const [dataToPlot, setDataTop] = useState([]);
+function Chart({ fileData, fileName }) {
+  const [firstPlot, setFirstPlot] = useState([]);
+  const [secondPlot, setSecondPlot] = useState([]);
+  console.log(fileData);
+  const range = (start, end, step) => {
+    return Array.from(
+      Array.from(Array(Math.ceil((end - start) / step)).keys()),
+      (x) => start + x * step,
+    );
+  };
 
   useEffect(() => {
-    if (Object.keys(fileData).length > 0) {
-      const data = fileData;
-      const time = data.time;
-      const glucose = data.glucose;
-      const measurement = data.measurement;
-      const chartsObject = [
-        { xaxis: time, yaxais: glucose, title: "Glucose Dataset" },
-        { xaxis: time, yaxais: measurement, title: "Measurement Dataset" },
-      ];
-      setDataTop(chartsObject);
-    }
+    let chartsObject = [];
+    fileData.map((obj) => {
+      let data = {
+        x: range(0, 610, 1),
+        y: obj.glucose,
+        type: "date",
+        mode: "line",
+
+        hoverinfo: "closest",
+        name: fileName,
+      };
+      chartsObject.push(data);
+    });
+    // const data = fileData;
+    // const time = data.time;
+    // const glucose = data.glucose;
+    // const chartsObject = [
+    //   { xaxis: time, yaxais: glucose, title: "Glucose Dataset" },
+    // { xaxis: time, yaxais: measurement, title: "Measurement Dataset" },
+    // ];
+    console.log(chartsObject);
+    setFirstPlot(chartsObject);
   }, [fileData]);
 
+  const HandleClick = (eventData) => {
+    let name = eventData.points[0]["data"]["name"];
+    let index = eventData.points[0]["pointIndex"];
+    const data = { file_name: name, index };
+    axios
+      .post(`http://localhost:5000/api/meas`, data)
+      .then((response) => {
+        if (response.data.status === true) {
+          let xaxis = [];
+          response.data.data.measurement.map((e, index) => {
+            xaxis.push(index);
+          });
+          console.log(response.data.data.measurement);
+          let meas = {
+            x: xaxis,
+            y: response.data.data.measurement,
+            type: "date",
+            mode: "line",
+
+            hoverinfo: "closest",
+            name: fileName,
+          };
+          setSecondPlot((p) => [...p, meas]);
+        } else {
+          // setFileData([]);
+        }
+        // setLoading(false);
+      })
+      .catch((err) => console.log(err));
+  };
+  console.log(firstPlot);
   return (
     <div className="row">
-      {dataToPlot.length > 0 &&
-        Labels &&
-        dataToPlot.map((obj, i) => (
-          <div className="col-12">
-            <Plot
-              data={[
-                {
-                  x: obj.xaxis,
-                  y: obj.yaxais,
-                  type: "date",
-                  mode: "line",
+      {firstPlot.length > 0 && (
+        <div className="col-12">
+          <Plot
+            data={firstPlot}
+            layout={{
+              autosize: true,
+              showlegend: false,
+              showgrid: true,
+              gridcolor: chartStyling.gridcolor,
+              textColor: chartStyling.textColor,
+              // title: obj.title,
+              titlefont: {
+                size: chartStyling.size,
+                color: chartStyling.textColor,
+              },
+              tickfont: {
+                size: chartStyling.size,
+                color: chartStyling.textColor,
+              },
 
-                  line: {
-                    width: 3,
-                    color: "#e6347d",
-                  },
-                  hoverinfo: "closest",
-                },
-              ]}
-              layout={{
-                autosize: true,
-                showlegend: false,
+              plot_bgcolor: chartStyling.bgColor,
+              paper_bgcolor: chartStyling.bgColor,
+              border_radius: chartStyling.borderRadius,
+              displayModeBar: false,
+              margin: {
+                l: chartStyling.marginLeft,
+                t: chartStyling.marginTop,
+                r: chartStyling.marginRight,
+                b: chartStyling.marginBottom,
+              },
+              width: 1100,
+              height: 350,
+              xaxis: {
+                automargin: true,
                 showgrid: true,
                 gridcolor: chartStyling.gridcolor,
-                textColor: chartStyling.textColor,
-                title: obj.title,
-                titlefont: {
+                mirror: chartStyling.mirrorTicks,
+                showline: true,
+                linecolor: chartStyling.lcolor,
+                rangeslider: {},
+                // rangeselector: Labels[i],
+                tickfont: {
                   size: chartStyling.size,
                   color: chartStyling.textColor,
                 },
+                title: {
+                  // text: Labels[i]["xLabel"],
+                  font: {
+                    size: chartStyling.size,
+                    color: chartStyling.textColor,
+                  },
+                },
+              },
+              yaxis: {
+                showgrid: true,
+                automargin: true,
+                gridcolor: chartStyling.gridcolor,
+                mirror: chartStyling.mirrorTicks,
+                showline: true,
+                linecolor: chartStyling.lcolor,
+                fixedrange: true,
                 tickfont: {
                   size: chartStyling.size,
                   color: chartStyling.textColor,
                 },
 
-                plot_bgcolor: chartStyling.bgColor,
-                paper_bgcolor: chartStyling.bgColor,
-                border_radius: chartStyling.borderRadius,
-                displayModeBar: false,
-                margin: {
-                  l: chartStyling.marginLeft,
-                  t: chartStyling.marginTop,
-                  r: chartStyling.marginRight,
-                  b: chartStyling.marginBottom,
-                },
-                width: 800,
-                height: 350,
-                xaxis: {
-                  automargin: true,
-                  showgrid: true,
-                  gridcolor: chartStyling.gridcolor,
-                  mirror: chartStyling.mirrorTicks,
-                  showline: true,
-                  linecolor: chartStyling.lcolor,
-                  rangeslider: {},
-                  rangeselector: Labels[i],
-                  tickfont: {
+                title: {
+                  // text: Labels[i]["yLabel"],
+                  font: {
                     size: chartStyling.size,
                     color: chartStyling.textColor,
                   },
-                  title: {
-                    text: Labels[i]["xLabel"],
-                    font: {
-                      size: chartStyling.size,
-                      color: chartStyling.textColor,
-                    },
-                  },
                 },
-                yaxis: {
-                  showgrid: true,
-                  automargin: true,
-                  gridcolor: chartStyling.gridcolor,
-                  mirror: chartStyling.mirrorTicks,
-                  showline: true,
-                  linecolor: chartStyling.lcolor,
-                  fixedrange: true,
-                  tickfont: {
-                    size: chartStyling.size,
-                    color: chartStyling.textColor,
-                  },
+              },
+            }}
+            onClick={HandleClick}
+            config={{
+              responsive: true,
+              useResizeHandler: true,
+              displaylogo: false,
+              displayModeBar: true,
+            }}
+          />
+        </div>
+      )}
+      {secondPlot.length > 0 && (
+        <div className="col-12">
+          <Plot
+            data={secondPlot}
+            layout={{
+              autosize: true,
+              showlegend: false,
+              showgrid: true,
+              gridcolor: chartStyling.gridcolor,
+              textColor: chartStyling.textColor,
+              // title: obj.title,
+              titlefont: {
+                size: chartStyling.size,
+                color: chartStyling.textColor,
+              },
+              tickfont: {
+                size: chartStyling.size,
+                color: chartStyling.textColor,
+              },
 
-                  title: {
-                    text: Labels[i]["yLabel"],
-                    font: {
-                      size: chartStyling.size,
-                      color: chartStyling.textColor,
-                    },
+              plot_bgcolor: chartStyling.bgColor,
+              paper_bgcolor: chartStyling.bgColor,
+              border_radius: chartStyling.borderRadius,
+              displayModeBar: false,
+              margin: {
+                l: chartStyling.marginLeft,
+                t: chartStyling.marginTop,
+                r: chartStyling.marginRight,
+                b: chartStyling.marginBottom,
+              },
+              width: 1100,
+              height: 350,
+              xaxis: {
+                automargin: true,
+                showgrid: true,
+                gridcolor: chartStyling.gridcolor,
+                mirror: chartStyling.mirrorTicks,
+                showline: true,
+                linecolor: chartStyling.lcolor,
+
+                tickfont: {
+                  size: chartStyling.size,
+                  color: chartStyling.textColor,
+                },
+                title: {
+                  // text: Labels[i]["xLabel"],
+                  font: {
+                    size: chartStyling.size,
+                    color: chartStyling.textColor,
                   },
                 },
-              }}
-              config={{
-                responsive: true,
-                useResizeHandler: true,
-                displaylogo: false,
-                displayModeBar: true,
-              }}
-            />
-          </div>
-        ))}
+              },
+              yaxis: {
+                showgrid: true,
+                automargin: true,
+                gridcolor: chartStyling.gridcolor,
+                mirror: chartStyling.mirrorTicks,
+                showline: true,
+                linecolor: chartStyling.lcolor,
+                fixedrange: true,
+                tickfont: {
+                  size: chartStyling.size,
+                  color: chartStyling.textColor,
+                },
+
+                title: {
+                  // text: Labels[i]["yLabel"],
+                  font: {
+                    size: chartStyling.size,
+                    color: chartStyling.textColor,
+                  },
+                },
+              },
+            }}
+            config={{
+              responsive: true,
+              useResizeHandler: true,
+              displaylogo: false,
+              displayModeBar: true,
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }
