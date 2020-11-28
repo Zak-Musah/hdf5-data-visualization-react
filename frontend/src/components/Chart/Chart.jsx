@@ -4,78 +4,7 @@ import axios from "axios";
 
 import { chartStyling, Labels } from "../Helpers/Constants";
 
-function Chart({ fileData, multipleFiles }) {
-  const [firstPlot, setFirstPlot] = useState([]);
-  const [secondPlot, setSecondPlot] = useState([]);
-  const range = (start, end, step) => {
-    return Array.from(
-      Array.from(Array(Math.ceil((end - start) / step)).keys()),
-      (x) => start + x * step,
-    );
-  };
-
-  const HandleDeletePlotTwo = (index) => {};
-
-  useEffect(() => {
-    let chartsObject = [];
-    fileData.map((obj, index) => {
-      let data = {
-        x: range(0, 610, 1),
-        y: obj.glucose,
-        type: "date",
-        mode: "line",
-
-        hoverinfo: "closest",
-        name: multipleFiles[index][0],
-      };
-      chartsObject.push(data);
-    });
-    // const data = fileData;
-    // const time = data.time;
-    // const glucose = data.glucose;
-    // const chartsObject = [
-    //   { xaxis: time, yaxais: glucose, title: "Glucose Dataset" },
-    // { xaxis: time, yaxais: measurement, title: "Measurement Dataset" },
-    // ];
-
-    setFirstPlot(chartsObject);
-  }, [fileData]);
-
-  const HandleClick = (eventData) => {
-    let name = eventData.points[0]["data"]["name"];
-    let index = eventData.points[0]["pointIndex"];
-    let glucoseValue = eventData.points[0]["y"];
-
-    const data = { file_name: name, index };
-    axios
-      .post(`http://localhost:5000/api/meas`, data)
-      .then((response) => {
-        if (response.data.status === true) {
-          let xaxis = [];
-          response.data.data.measurement.map((e, index) => {
-            xaxis.push(index);
-          });
-          console.log(response.data.data.measurement);
-          let meas = {
-            x: xaxis,
-            y: response.data.data.measurement,
-            type: "date",
-            mode: "line",
-
-            hoverinfo: "closest",
-            name: `${name.slice(9, -5)}: ${(glucoseValue * 1e6).toPrecision(
-              2,
-            )}`,
-          };
-          setSecondPlot((p) => [...p, meas]);
-        } else {
-          // setFileData([]);
-        }
-        // setLoading(false);
-      })
-      .catch((err) => console.log(err));
-  };
-
+function Chart({ firstPlot, secondPlot, HandleClick }) {
   console.log(firstPlot);
   console.log(secondPlot);
   return (

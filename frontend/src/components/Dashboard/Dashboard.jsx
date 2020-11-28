@@ -7,7 +7,7 @@ import Rodal from "rodal";
 import "rodal/lib/rodal.css";
 
 import Chart from "../Chart/Chart";
-import { compareNames } from "../Helpers/DashboardFunctions";
+import { compareNames, range } from "../Helpers/DashboardFunctions";
 
 function Dashboard(props) {
   const [fileNames, setFileNames] = useState([]);
@@ -15,7 +15,8 @@ function Dashboard(props) {
   const [fileName, setFileName] = useState("");
   const [fileData, setFileData] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const [firstPlot, setFirstPlot] = useState([]);
+  const [secondPlot, setSecondPlot] = useState([]);
   useEffect(() => {
     axios
       .get(`http://localhost:5000/api/get_file_names`)
@@ -54,9 +55,65 @@ function Dashboard(props) {
     }
   };
 
+  useEffect(() => {
+    let chartsObject = [];
+    fileData.map((obj, index) => {
+      let data = {
+        x: range(0, 610, 1),
+        y: obj.glucose,
+        type: "date",
+        mode: "line",
+
+        hoverinfo: "closest",
+        name: multipleFiles[index][0],
+      };
+      chartsObject.push(data);
+    });
+    setFirstPlot(chartsObject);
+  }, [fileData]);
+
+  const HandleClick = (eventData) => {
+    console.log(eventData);
+
+    let name = eventData.points[0]["data"]["name"];
+    let index = eventData.points[0]["pointIndex"];
+    let glucoseValue = eventData.points[0]["y"];
+    // setTrackSpectraPlots({ name });
+    const data = { file_name: name, index };
+    axios
+      .post(`http://localhost:5000/api/meas`, data)
+      .then((response) => {
+        if (response.data.status === true) {
+          let xaxis = [];
+          response.data.data.measurement.map((e, index) => {
+            xaxis.push(index);
+          });
+          console.log(response.data.data.measurement);
+          let meas = {
+            x: xaxis,
+            y: response.data.data.measurement,
+            type: "date",
+            mode: "line",
+
+            hoverinfo: "closest",
+            name,
+            // name: `${name.slice(9, -5)}: ${(glucoseValue * 1e6).toPrecision(
+            //   2,
+            // )}`,
+          };
+          setSecondPlot((p) => [...p, meas]);
+        } else {
+          // setFileData([]);
+        }
+        // setLoading(false);
+      })
+      .catch((err) => console.log(err));
+  };
   const clearDashboard = () => {
     setFileData([]);
     setFileName("");
+    setSecondPlot([]);
+    setMultipleFiles([]);
   };
   const popover = (
     <Popover id="popover-basic">
@@ -83,6 +140,18 @@ function Dashboard(props) {
 
   const handleDelete = (index) => {
     if (multipleFiles.length > 0) {
+      let name = multipleFiles[index][0];
+
+      if (secondPlot.length > 0) {
+        let newArray = [];
+        secondPlot.map((obj, index) => {
+          if (obj.name === name) {
+            return;
+          }
+          newArray.push(obj);
+        });
+        setSecondPlot(newArray);
+      }
       setMultipleFiles(multipleFiles.filter((_, i) => i !== index));
       setFileData(fileData.filter((_, i) => i !== index));
     } else {
@@ -98,14 +167,6 @@ function Dashboard(props) {
           <h5 className="card-title">Select File</h5>
 
           <div className="list-group">
-            {/* <button
-              onClick={() => clearDashboard()}
-              className="btn btn-primary"
-              type="button"
-              key="clear-dashboard"
-            >
-              Clear Dashboard
-            </button> */}
             <OverlayTrigger
               trigger="click"
               rootClose
@@ -162,6 +223,16 @@ function Dashboard(props) {
                 </button>
               </div>
             ))}
+          {multipleFiles.length > 0 && (
+            <button
+              onClick={() => clearDashboard()}
+              className="btn btn-primary"
+              type="button"
+              key="clear-dashboard"
+            >
+              Clear Dashboard
+            </button>
+          )}
         </div>
       </div>
       <div className="col bg-light card">
@@ -179,7 +250,11 @@ function Dashboard(props) {
                 Click on a glucose data point to display corresponding meas in
                 another graph
               </h5>
-              <Chart fileData={fileData} multipleFiles={multipleFiles} />
+              <Chart
+                firstPlot={firstPlot}
+                secondPlot={secondPlot}
+                HandleClick={HandleClick}
+              />
             </>
           ) : (
             <h4 className="card-title" style={{ color: "white" }}>
