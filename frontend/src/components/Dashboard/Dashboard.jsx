@@ -3,8 +3,11 @@ import { Spinner } from "react-bootstrap";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Popover, OverlayTrigger, Button } from "react-bootstrap";
+import Rodal from "rodal";
+import "rodal/lib/rodal.css";
 
 import Chart from "../Chart/Chart";
+import { compareNames } from "../Helpers/DashboardFunctions";
 
 function Dashboard(props) {
   const [fileNames, setFileNames] = useState([]);
@@ -17,7 +20,6 @@ function Dashboard(props) {
     axios
       .get(`http://localhost:5000/api/get_file_names`)
       .then((response) => {
-        console.log(response);
         if (response.data.status === true) {
           setFileNames(response.data.data);
         } else {
@@ -28,24 +30,28 @@ function Dashboard(props) {
   }, []);
 
   const fetchData = (index) => {
-    console.log(fileNames);
     const name = fileNames[index];
-    console.log(name);
+
     setFileName(name);
-    setMultipleFiles((p) => [...p, [name]]);
-    setLoading(true);
-    const data = { file_name: name, index: 10 };
-    axios
-      .post(`http://localhost:5000/api/glucose`, data)
-      .then((response) => {
-        if (response.data.status === true) {
-          setFileData((p) => [...p, response.data.data]);
-        } else {
-          setFileData([]);
-        }
-        setLoading(false);
-      })
-      .catch((err) => console.log(err));
+    console.log(multipleFiles, name);
+    if (multipleFiles.length > 0 && compareNames(multipleFiles, name)) {
+      return;
+    } else {
+      setMultipleFiles((p) => [...p, [name]]);
+      setLoading(true);
+      const data = { file_name: name, index: 10 };
+      axios
+        .post(`http://localhost:5000/api/glucose`, data)
+        .then((response) => {
+          if (response.data.status === true) {
+            setFileData((p) => [...p, response.data.data]);
+          } else {
+            setFileData([]);
+          }
+          setLoading(false);
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   const clearDashboard = () => {
@@ -54,7 +60,12 @@ function Dashboard(props) {
   };
   const popover = (
     <Popover id="popover-basic">
-      <Popover.Title as="h3">Select file/s to visualize</Popover.Title>
+      <Popover.Title
+        style={{ backgroundColor: " #1e1f45", color: "white" }}
+        as="h3"
+      >
+        <h5>Select file/s to visualize</h5>
+      </Popover.Title>
       {fileNames &&
         fileNames.map((fileName, index) => (
           <button
@@ -62,6 +73,7 @@ function Dashboard(props) {
             className="list-group-item list-group-item-action"
             onClick={() => fetchData(index)}
             key={index}
+            style={{ backgroundColor: "#1e1f45", color: "white" }}
           >
             {fileName.slice(0, -5).toUpperCase()}
           </button>
@@ -72,14 +84,16 @@ function Dashboard(props) {
   const handleDelete = (index) => {
     if (multipleFiles.length > 0) {
       setMultipleFiles(multipleFiles.filter((_, i) => i !== index));
+      setFileData(fileData.filter((_, i) => i !== index));
     } else {
+      setFileData([]);
       setMultipleFiles([]);
     }
   };
   console.log(multipleFiles);
   return (
     <>
-      <div className="col-3 bg-light card">
+      <div className="col-3 bg-violet card">
         <div className="card-body">
           <h5 className="card-title">Select File</h5>
 
@@ -98,15 +112,23 @@ function Dashboard(props) {
               placement="right"
               overlay={popover}
             >
-              <Button variant="success">Dataset</Button>
+              <Button
+                variant="success"
+                style={{
+                  backgroundColor: "#1e1f45",
+                  transition: "box-shadow 5s",
+                }}
+              >
+                <h3>Dataset</h3>
+              </Button>
             </OverlayTrigger>
           </div>
           <br />
-          <h6 className="card-subtitle mb-2 text-muted">
+          {/* <h6 className="card-subtitle mb-2 text-muted">
             <big>Dataset to visualize</big>
-          </h6>
+          </h6> */}
           {multipleFiles.length > 0 &&
-            multipleFiles.map((fileName, index) => (
+            multipleFiles.map((file, index) => (
               <div style={{ width: "100%", " text-align": "center" }}>
                 <button
                   type="button"
@@ -114,15 +136,25 @@ function Dashboard(props) {
                   key={index}
                   style={{
                     "pointer-events": "none",
-                    width: "80%",
+                    width: "90%",
+                    color: "white",
                     display: "inline-block",
+                    backgroundColor: "#1e1f45",
+                    alignItems: "center",
                   }}
                 >
-                  {fileName}
+                  {file[0].slice(0, -5).toUpperCase()}
                 </button>
                 <button
                   // variant="danger"
-                  style={{ width: "10%", display: "inline-block" }}
+                  style={{
+                    width: "10%",
+                    display: "inline-block",
+                    position: "absolute",
+                    zIndex: 1010,
+                    backgroundColor: "brown",
+                    transition: "box-shadow .5s",
+                  }}
                   className="list-group-item list-group-item-action"
                   onClick={() => handleDelete(index)}
                 >
@@ -133,7 +165,7 @@ function Dashboard(props) {
         </div>
       </div>
       <div className="col bg-light card">
-        <div className="card-body" style={{ paddingLeft: "20%" }}>
+        <div className="card-body" style={{ paddingLeft: "4%" }}>
           {loading && (
             <center>
               <Spinner animation="border" role="status">
@@ -143,13 +175,16 @@ function Dashboard(props) {
           )}
           {!loading && fileName.length > 0 ? (
             <>
-              <h4 className="card-title">
-                {fileName.slice(0, -5).toUpperCase()}
-              </h4>
-              <Chart fileData={fileData} fileName={fileName} />
+              <h5 className="card-title" style={{ color: "white" }}>
+                Click on a glucose data point to display corresponding meas in
+                another graph
+              </h5>
+              <Chart fileData={fileData} multipleFiles={multipleFiles} />
             </>
           ) : (
-            <h4 className="card-title">No data yet...</h4>
+            <h4 className="card-title" style={{ color: "white" }}>
+              No data yet...
+            </h4>
           )}
         </div>
       </div>

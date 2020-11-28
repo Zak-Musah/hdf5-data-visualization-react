@@ -1,24 +1,27 @@
 .App {
-  background-color: rgb(235, 243, 242);
+  background-color: #1c1b3a;
   align-items: stretch;
   height: 100%;
 }
 
 body {
-  background-color: rgb(253, 253, 253);
+  background-color: #1c1b3a;
   height: 100%;
   overflow: hidden;
 }
 .nav-bar {
   margin: 0pt;
-  background-color: #1e1f45;
+  background-color: #1c1b3a;
 }
 .navbar-content {
   display: flex;
+  background-color: #1c1b3a;
 }
-
+.sticky-top {
+  background-color: #1c1b3a;
+}
 .main-page {
-  background-color: rgb(241, 234, 234);
+  background-color: #1c1b3a;
   margin-top: 0pt;
   margin-bottom: 0pt;
   height: 100%;
@@ -29,32 +32,42 @@ body {
   height: 100vh;
   overflow-y: hidden;
 }
+.bg-light {
+  background-color: #1c1b3a;
+}
+.navbar {
+  background-color: #1c1b3a;
+}
 
-.title {
+/* .title {
   margin-right: 10pt;
   margin-left: 10pt;
   margin-top: 10pt;
   margin-bottom: 0pt;
-  color: white;
+  background-color: #1c1b3a;
   text-decoration: none;
-}
+} */
 
+.card-body {
+  background-color: #1c1b3a;
+}
 .row {
+  background-color: #1c1b3a;
   height: 100vh;
   width: 100%;
   display: flex;
 }
 /* .col-sm-3 {
   height: 100vh;
-  background-color: rgb(219, 230, 222);
   width: 20%;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-}
+  background-color: #1c1b3a;
+} */
 
-.col-sm-9 {
+/* .col-sm-9 {
   height: 100vh;
   width: 80%;
   background-color: rgb(241, 238, 238);
@@ -64,6 +77,7 @@ body {
   flex-direction: column;
   overflow-x: hidden;
 } */
+*/
 /* .dataset {
   cursor: pointer;
 } */

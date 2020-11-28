@@ -10,7 +10,7 @@ import tzlocal
 
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/*": {"origins": "http://localhost:3001"}})
+cors = CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 FOLDER_PATH = "C:/PERSONAL/Applications/new application/Career day/October 2020/irubis/IRUBIS_CHALLENG_ABDUL-RAZAK MUSAH/backend/dataset/"
 # FOLDER_PATH = "/usr/src/app/dataset/" # change directory here for correct path to dataset - without docker
 

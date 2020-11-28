@@ -1,5 +1,5 @@
 export const chartStyling = {
-  size: 12,
+  size: 16,
   mirrorTicks: "ticks",
   marginLeft: 55,
   marginTop: 50,
@@ -7,9 +7,9 @@ export const chartStyling = {
   marginBottom: 55,
   borderRadius: 20,
   barGap: 0.125,
-  gridcolor: "#ffeb00",
-  lcolor: "#ffeb00",
-  bgColor: "#1f1e45",
+  gridcolor: "grey",
+  lcolor: "grey",
+  bgColor: "#1e1f45",
   textColor: "white",
 };
 
