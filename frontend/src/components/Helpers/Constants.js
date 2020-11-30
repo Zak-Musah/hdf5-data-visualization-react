@@ -1,25 +1,30 @@
 export const chartStyling = {
-  size: 12,
+  size: 18,
   mirrorTicks: "ticks",
   marginLeft: 55,
-  marginTop: 50,
+  marginTop: 40,
   marginRight: 40,
   marginBottom: 55,
   borderRadius: 20,
-  barGap: 0.125,
-  gridcolor: "#ffeb00",
-  lcolor: "#ffeb00",
-  bgColor: "#1f1e45",
+  gridcolor: "grey",
+  lcolor: "grey",
+  bgColor: "#1e1f45",
   textColor: "white",
 };
 
-export const Labels = [
-  {
-    xLabel: "Time",
-    yLabel: "Glucose",
+export const chartBgColor = {
+  darkMode: {
+    legendColor: "white",
+    gridcolor: "grey",
+    lcolor: "grey",
+    bgColor: "#1e1f45",
+    textColor: "white",
   },
-  {
-    xLabel: "Time [s]",
-    yLabel: "Wavenumber [cm-1]",
+  lightMode: {
+    legendColor: "black",
+    gridcolor: "black",
+    lcolor: "black",
+    bgColor: "white",
+    textColor: "black",
   },
-];
+};

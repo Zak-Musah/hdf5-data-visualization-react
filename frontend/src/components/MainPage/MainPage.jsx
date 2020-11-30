@@ -5,9 +5,9 @@ import Dashboard from "../Dashboard/Dashboard";
 function MainPage() {
   return (
     <>
-      <nav className="navbar navbar-light sticky-top bg-light">
+      <nav className="navbar ">
         <a className="navbar-brand" href="/#">
-          <strong>IRUBIS ANALYTICS DASHBOARD</strong>
+          <h2 style={{ color: "white" }}>IRUBIS DASHBOARD</h2>
         </a>
       </nav>
       <div className="row">

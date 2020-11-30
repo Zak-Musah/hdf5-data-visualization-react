@@ -1,24 +1,27 @@
 .App {
-  background-color: rgb(235, 243, 242);
+  background-color: #1c1b3a;
   align-items: stretch;
   height: 100%;
 }
 
 body {
-  background-color: rgb(253, 253, 253);
+  background-color: #1c1b3a;
   height: 100%;
   overflow: hidden;
 }
 .nav-bar {
   margin: 0pt;
-  background-color: #1e1f45;
+  background-color: #1c1b3a;
 }
 .navbar-content {
   display: flex;
+  background-color: #1c1b3a;
 }
-
+.sticky-top {
+  background-color: #1c1b3a;
+}
 .main-page {
-  background-color: rgb(241, 234, 234);
+  background-color: #1c1b3a;
   margin-top: 0pt;
   margin-bottom: 0pt;
   height: 100%;
@@ -29,44 +32,23 @@ body {
   height: 100vh;
   overflow-y: hidden;
 }
-
-.title {
-  margin-right: 10pt;
-  margin-left: 10pt;
-  margin-top: 10pt;
-  margin-bottom: 0pt;
-  color: white;
-  text-decoration: none;
+.bg-light {
+  background-color: #1c1b3a;
+}
+.navbar {
+  background-color: #1c1b3a;
 }
 
+.card-body {
+  background-color: #1c1b3a;
+}
 .row {
+  background-color: #1c1b3a;
   height: 100vh;
   width: 100%;
   display: flex;
 }
-/* .col-sm-3 {
-  height: 100vh;
-  background-color: rgb(219, 230, 222);
-  width: 20%;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 
-.col-sm-9 {
-  height: 100vh;
-  width: 80%;
-  background-color: rgb(241, 238, 238);
-  display: flex;
-  position: relative;
-  overflow-y: hidden;
-  flex-direction: column;
-  overflow-x: hidden;
-} */
-/* .dataset {
-  cursor: pointer;
-} */
 .dataset-icon {
   border-radius: 5px;
   background-color: rgb(113, 116, 114);
@@ -82,20 +64,9 @@ body {
   width: 90%;
 }
 
-/* js-plotly-plot .plotly {
-  position: relative;
-  height: 450px;
+.js-plotly-plot .plotly .cursor-ew-resize {
+  cursor: crosshair !important;
 }
-.svg-container {
-  position: relative;
-  height: 450px;
+.js-plotly-plot .plotly .cursor-ew-resize:active:hover {
+  cursor: ew-resize !important;
 }
-
-.main-svg {
-  position: relative;
-  height: 450px;
-}
-.plot-container {
-  position: relative;
-  height: 450px;
-} */
