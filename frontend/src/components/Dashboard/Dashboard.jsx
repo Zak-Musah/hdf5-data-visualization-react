@@ -23,7 +23,7 @@ function Dashboard(props) {
 
   useEffect(() => {
     axios
-      .get(`https://irubis-dashboard.herokuapp.com/api/get_file_names`)
+      .get(`${process.env.REACT_APP_BACKEND_SERVICE_URL}/api/get_file_names`)
       .then((response) => {
         if (response.data.status === true) {
           setFileNames(response.data.data);
@@ -65,7 +65,7 @@ function Dashboard(props) {
       const data = { file_name: name, index: 10 };
       axios
         .post(
-          `https://irubis-dashboard.herokuapp.com/api/get_glucose_data`,
+          `${process.env.REACT_APP_BACKEND_SERVICE_URL}/api/get_glucose_data`,
           data,
         )
         .then((response) => {
@@ -84,14 +84,13 @@ function Dashboard(props) {
     let name = eventData.points[0]["data"]["name"];
     let index = eventData.points[0]["pointIndex"];
     let glucoseVal = eventData.points[0]["y"];
-    console.log(glucoseVal, glucoseValue);
     const data = { file_name: name, index };
     if (glucoseValue.length > 0 && glucoseValue.includes(glucoseVal)) {
       return;
     } else {
       axios
         .post(
-          `https://irubis-dashboard.herokuapp.com/api/get_measurement_data`,
+          `${process.env.REACT_APP_BACKEND_SERVICE_URL}/api/get_measurement_data`,
           data,
         )
         .then((response) => {
@@ -117,7 +116,6 @@ function Dashboard(props) {
             };
             setGlucoseValue((p) => [...p, glucoseVal]);
             setSecondPlot((p) => [...p, meas]);
-          } else {
           }
         })
         .catch((err) => console.log(err));
@@ -133,10 +131,7 @@ function Dashboard(props) {
 
   const popover = (
     <Popover id="popover-basic">
-      <Popover.Title
-        style={{ backgroundColor: " #1e1f45", color: "white" }}
-        as="h3"
-      >
+      <Popover.Title style={{ backgroundColor: " #1e1f45", color: "white" }}>
         <h5>Select file/s to visualize</h5>
       </Popover.Title>
       {fileNames &&
@@ -149,6 +144,7 @@ function Dashboard(props) {
             style={{
               backgroundColor: "#1e1f45",
               color: "white",
+              textAlign: "center",
             }}
           >
             {fileName.slice(0, -5).toUpperCase()}
@@ -207,14 +203,13 @@ function Dashboard(props) {
           <br />
           {multipleFiles.length > 0 &&
             multipleFiles.map((file, index) => (
-              <div style={{ width: "100%", " text-align": "center" }}>
+              <div key={index} style={{ width: "100%", textAlign: "center" }}>
                 <button
                   type="button"
                   className="list-group-item list-group-item-action"
-                  key={index}
                   style={{
-                    "pointer-events": "none",
-                    width: "90%",
+                    marginRight: "50px",
+                    width: "70%",
                     color: "white",
                     display: "inline-block",
                     backgroundColor: "#1e1f45",
@@ -226,6 +221,7 @@ function Dashboard(props) {
                 <button
                   variant="danger"
                   style={{
+                    marginLeft: "-50px",
                     width: "10%",
                     display: "inline-block",
                     position: "absolute",

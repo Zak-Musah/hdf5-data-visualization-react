@@ -9,12 +9,11 @@ import h5py
 import tzlocal
 
 
+
+
 app = Flask(__name__)
-
-cors = CORS(app, resources={r"/*": {"origins": "http//localhost"}}) use this 
-# /usr/src/app # change directory here for correct path to dataset - without docker
-
-FOLDER_PATH = os.path.dirname(os.path.dirname(__file__))+"/dataset/" #Deployment to Heroku
+cors = CORS(app, resources={r"/*": {"origins": "http://localhost"}})
+FOLDER_PATH = "/usr/src/app/dataset/" # change directory here for correct path to dataset - without docker
 
 @app.route("/api/test")
 def test_sanity():
@@ -33,7 +32,6 @@ def get_file_names():
 @app.route('/api/get_glucose_data', methods=['POST'])
 def get_glucose_data():
     post_data = request.get_json()
-    print(post_data)
     file_name = post_data.get("file_name")
     if file_name:
         full_file_path = FOLDER_PATH + file_name
@@ -78,4 +76,4 @@ def get_data_from_file(path):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True,port=5000)
+    app.run(debug=True)
