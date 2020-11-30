@@ -10,27 +10,19 @@ import tzlocal
 
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
-FOLDER_PATH = "C:/PERSONAL/Applications/new application/Career day/October 2020/irubis/IRUBIS_CHALLENG_ABDUL-RAZAK MUSAH/backend/dataset/"
-# FOLDER_PATH = "/usr/src/app/dataset/" # change directory here for correct path to dataset - without docker
 
-    
-def get_data_from_file(path):
-    with h5py.File(path, 'r') as f:
-        data = f['internal']
-        glucose =  np.array(data['glucose'])
-        time =  np.array(data['time'])
-        measurements = np.array(data['measurement'])
-    return glucose,time,measurements
+cors = CORS(app, resources={r"/*": {"origins": "http//localhost"}}) use this 
+# /usr/src/app # change directory here for correct path to dataset - without docker
 
-   
+FOLDER_PATH = os.path.dirname(os.path.dirname(__file__))+"/dataset/" #Deployment to Heroku
+
 @app.route("/api/test")
 def test_sanity():
     return jsonify(status = True, data = None, message = "Success")
 
 
 @app.route('/api/get_file_names')
-def get_file_names():
+def get_file_names(): 
     os.chdir(FOLDER_PATH)
     hdf5_files = glob.glob('*.hdf5')
     if len(hdf5_files) > 0:
@@ -38,8 +30,8 @@ def get_file_names():
     return jsonify(status = False, data = None, message = "Failed"), 400
 
 
-@app.route('/api/glucose', methods=['POST'])
-def read_glucose_data():
+@app.route('/api/get_glucose_data', methods=['POST'])
+def get_glucose_data():
     post_data = request.get_json()
     print(post_data)
     file_name = post_data.get("file_name")
@@ -53,24 +45,37 @@ def read_glucose_data():
         return jsonify(status = True, data = result, message = "Data retrieved")
     return jsonify(status = False,data = None, message = "Failed"), 400
 
-@app.route('/api/meas', methods=['POST'])
-def read_meas_data():
+
+@app.route('/api/get_measurement_data', methods=['POST'])
+def get_measurement_data():
     post_data = request.get_json()
     file_name = post_data.get("file_name")
-    meas_num = post_data.get("index")
+    measurement_number = post_data.get("index")
     if file_name:
         full_file_path = FOLDER_PATH + file_name
         _ , _ ,measurements = get_data_from_file(full_file_path)
-        measurement = measurements[meas_num]
+        measurement = measurements[measurement_number]
         result = {
             'measurement' :  [i for i in measurement],
         }
         return jsonify(status = True, data = result, message = "Data retrieved")
     return jsonify(status = False,data = None, message = "Failed"), 400
+
+
 def convert_unix_timestamp(time):
     local_timezone = tzlocal.get_localzone()
     local_time = datetime.fromtimestamp(time, local_timezone)
     return local_time.strftime("%Y-%m-%d %H:%M:%S")
-   
+
+    
+def get_data_from_file(path):
+    with h5py.File(path, 'r') as f:
+        data = f['internal']
+        glucose =  np.array(data['glucose'])
+        time =  np.array(data['time'])
+        measurements = np.array(data['measurement'])
+    return glucose,time,measurements
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", debug=True,port=5000)

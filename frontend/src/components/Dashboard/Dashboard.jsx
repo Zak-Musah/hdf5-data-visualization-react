@@ -3,23 +3,27 @@ import { Spinner } from "react-bootstrap";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Popover, OverlayTrigger, Button } from "react-bootstrap";
-import Rodal from "rodal";
-import "rodal/lib/rodal.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMoon } from "@fortawesome/free-solid-svg-icons";
 
 import Chart from "../Chart/Chart";
 import { compareNames, range } from "../Helpers/DashboardFunctions";
+import { chartBgColor } from "../Helpers/Constants";
 
 function Dashboard(props) {
   const [fileNames, setFileNames] = useState([]);
   const [multipleFiles, setMultipleFiles] = useState([]);
-  const [fileName, setFileName] = useState("");
   const [fileData, setFileData] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [firstPlot, setFirstPlot] = useState([]);
   const [secondPlot, setSecondPlot] = useState([]);
+  const [glucoseValue, setGlucoseValue] = useState([]);
+  const [fileName, setFileName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/get_file_names`)
+      .get(`https://irubis-dashboard.herokuapp.com/api/get_file_names`)
       .then((response) => {
         if (response.data.status === true) {
           setFileNames(response.data.data);
@@ -30,11 +34,29 @@ function Dashboard(props) {
       .catch((err) => console.log(err));
   }, []);
 
+  useEffect(() => {
+    let chartsObject = [];
+    fileData.map((obj, index) => {
+      let data = {
+        x: range(0, 610, 1),
+        y: obj.glucose,
+        type: "date",
+        mode: "line",
+        hoverinfo: "closest",
+        name: multipleFiles[index][0],
+      };
+      chartsObject.push(data);
+    });
+    setFirstPlot(chartsObject);
+  }, [fileData]);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode((p) => !p);
+  };
+
   const fetchData = (index) => {
     const name = fileNames[index];
-
     setFileName(name);
-    console.log(multipleFiles, name);
     if (multipleFiles.length > 0 && compareNames(multipleFiles, name)) {
       return;
     } else {
@@ -42,7 +64,10 @@ function Dashboard(props) {
       setLoading(true);
       const data = { file_name: name, index: 10 };
       axios
-        .post(`http://localhost:5000/api/glucose`, data)
+        .post(
+          `https://irubis-dashboard.herokuapp.com/api/get_glucose_data`,
+          data,
+        )
         .then((response) => {
           if (response.data.status === true) {
             setFileData((p) => [...p, response.data.data]);
@@ -55,66 +80,57 @@ function Dashboard(props) {
     }
   };
 
-  useEffect(() => {
-    let chartsObject = [];
-    fileData.map((obj, index) => {
-      let data = {
-        x: range(0, 610, 1),
-        y: obj.glucose,
-        type: "date",
-        mode: "line",
-
-        hoverinfo: "closest",
-        name: multipleFiles[index][0],
-      };
-      chartsObject.push(data);
-    });
-    setFirstPlot(chartsObject);
-  }, [fileData]);
-
   const HandleClick = (eventData) => {
-    console.log(eventData);
-
     let name = eventData.points[0]["data"]["name"];
     let index = eventData.points[0]["pointIndex"];
-    let glucoseValue = eventData.points[0]["y"];
-    // setTrackSpectraPlots({ name });
+    let glucoseVal = eventData.points[0]["y"];
+    console.log(glucoseVal, glucoseValue);
     const data = { file_name: name, index };
-    axios
-      .post(`http://localhost:5000/api/meas`, data)
-      .then((response) => {
-        if (response.data.status === true) {
-          let xaxis = [];
-          response.data.data.measurement.map((e, index) => {
-            xaxis.push(index);
-          });
-          console.log(response.data.data.measurement);
-          let meas = {
-            x: xaxis,
-            y: response.data.data.measurement,
-            type: "date",
-            mode: "line",
-
-            hoverinfo: "closest",
-            name,
-            // name: `${name.slice(9, -5)}: ${(glucoseValue * 1e6).toPrecision(
-            //   2,
-            // )}`,
-          };
-          setSecondPlot((p) => [...p, meas]);
-        } else {
-          // setFileData([]);
-        }
-        // setLoading(false);
-      })
-      .catch((err) => console.log(err));
+    if (glucoseValue.length > 0 && glucoseValue.includes(glucoseVal)) {
+      return;
+    } else {
+      axios
+        .post(
+          `https://irubis-dashboard.herokuapp.com/api/get_measurement_data`,
+          data,
+        )
+        .then((response) => {
+          if (response.data.status === true) {
+            let xaxis = [];
+            let glucoseArray = [];
+            response.data.data.measurement.map((e, index) => {
+              xaxis.push(index);
+              glucoseArray.push(glucoseVal);
+            });
+            let meas = {
+              x: xaxis,
+              y: response.data.data.measurement,
+              type: "date",
+              mode: "line",
+              hoverinfo: "closest",
+              name,
+              hovertemplate:
+                "<b>Glucose</b>: " +
+                "<b>%{text}</b> " +
+                "<br> <i>Wavenumber</i>: %{y}",
+              text: glucoseArray,
+            };
+            setGlucoseValue((p) => [...p, glucoseVal]);
+            setSecondPlot((p) => [...p, meas]);
+          } else {
+          }
+        })
+        .catch((err) => console.log(err));
+    }
   };
+
   const clearDashboard = () => {
     setFileData([]);
     setFileName("");
     setSecondPlot([]);
     setMultipleFiles([]);
   };
+
   const popover = (
     <Popover id="popover-basic">
       <Popover.Title
@@ -130,7 +146,10 @@ function Dashboard(props) {
             className="list-group-item list-group-item-action"
             onClick={() => fetchData(index)}
             key={index}
-            style={{ backgroundColor: "#1e1f45", color: "white" }}
+            style={{
+              backgroundColor: "#1e1f45",
+              color: "white",
+            }}
           >
             {fileName.slice(0, -5).toUpperCase()}
           </button>
@@ -157,15 +176,16 @@ function Dashboard(props) {
     } else {
       setFileData([]);
       setMultipleFiles([]);
+      setFileName("");
+      setSecondPlot([]);
+      setLoading(false);
     }
   };
-  console.log(multipleFiles);
+
   return (
     <>
       <div className="col-3 bg-violet card">
         <div className="card-body">
-          <h5 className="card-title">Select File</h5>
-
           <div className="list-group">
             <OverlayTrigger
               trigger="click"
@@ -180,14 +200,11 @@ function Dashboard(props) {
                   transition: "box-shadow 5s",
                 }}
               >
-                <h3>Dataset</h3>
+                <h3>Choose Dataset</h3>
               </Button>
             </OverlayTrigger>
           </div>
           <br />
-          {/* <h6 className="card-subtitle mb-2 text-muted">
-            <big>Dataset to visualize</big>
-          </h6> */}
           {multipleFiles.length > 0 &&
             multipleFiles.map((file, index) => (
               <div style={{ width: "100%", " text-align": "center" }}>
@@ -207,7 +224,7 @@ function Dashboard(props) {
                   {file[0].slice(0, -5).toUpperCase()}
                 </button>
                 <button
-                  // variant="danger"
+                  variant="danger"
                   style={{
                     width: "10%",
                     display: "inline-block",
@@ -223,6 +240,7 @@ function Dashboard(props) {
                 </button>
               </div>
             ))}
+          <br />
           {multipleFiles.length > 0 && (
             <button
               onClick={() => clearDashboard()}
@@ -230,7 +248,7 @@ function Dashboard(props) {
               type="button"
               key="clear-dashboard"
             >
-              Clear Dashboard
+              <h5> Clear Dashboard</h5>
             </button>
           )}
         </div>
@@ -247,13 +265,28 @@ function Dashboard(props) {
           {!loading && fileName.length > 0 ? (
             <>
               <h5 className="card-title" style={{ color: "white" }}>
-                Click on a glucose data point to display corresponding meas in
-                another graph
+                Click on glucose data point to display corresponding spectrum in
+                second graph
               </h5>
+              <Button
+                variant={isDarkMode ? "success" : "primary"}
+                onClick={() => toggleDarkMode()}
+                style={{
+                  float: "right",
+                  marginRight: "15px",
+                  marginTop: "-35px",
+                }}
+              >
+                <FontAwesomeIcon icon={faMoon} />
+              </Button>
+
               <Chart
                 firstPlot={firstPlot}
                 secondPlot={secondPlot}
                 HandleClick={HandleClick}
+                lightDarkMode={
+                  isDarkMode ? chartBgColor.darkMode : chartBgColor.lightMode
+                }
               />
             </>
           ) : (

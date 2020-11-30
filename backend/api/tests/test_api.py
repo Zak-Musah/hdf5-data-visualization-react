@@ -25,10 +25,10 @@ class TestAPIService(BaseTestCase):
         self.assertTrue(data["data"][0][-4:] == "hdf5")
         self.assertTrue(data["status"])
 
-    def test_read_data_invalid_file_name(self):
+    def test_get_glucose_data_invalid_file_name(self):
         """Test api service return invalid file data"""
         response = self.client.post(
-            "/api/read_data",
+            "/api/get_glucose_data",
             data=json.dumps({}),
             content_type="application/json"
         )
@@ -38,10 +38,10 @@ class TestAPIService(BaseTestCase):
         self.assertIn("Failed", data["message"])
         self.assertFalse(data["status"])
 
-    def test_read_data_valid_file_name(self):
+    def test_get_glucose_data_valid_file_name(self):
         """Test api service return valid file data"""
         response = self.client.post(
-            "/api/read_data",
+            "/api/get_glucose_data",
             data=json.dumps({
                 "file_name" : "test_dataset_1.hdf5"
             }),
@@ -52,6 +52,24 @@ class TestAPIService(BaseTestCase):
         self.assertIsNotNone(data["data"])
         self.assertTrue(len(data["data"]) > 0)
         self.assertIn("glucose",data["data"])
-        self.assertIn("measurement",data["data"])
         self.assertIn("time",data["data"])
+        self.assertTrue(data["status"])
+
+
+    def test_get_measurement_data_valid_file_name(self):
+        """Test api service return valid file data"""
+        response = self.client.post(
+            "/api/get_measurement_data",
+            data=json.dumps({
+                "file_name" : "test_dataset_1.hdf5",
+                "index":10
+            }),
+            content_type="application/json"
+        )
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNotNone(data["data"])
+        self.assertTrue(len(data["data"]) > 0)
+        self.assertNotIn("glucose",data["data"])
+        self.assertIn("measurement",data["data"])
         self.assertTrue(data["status"])

@@ -5,3 +5,4 @@ Flask-Testing==0.8.0
 h5py==3.1.0
 numpy==1.19.4
 tzlocal==2.1
+gunicorn==19.9.0

@@ -39,15 +39,6 @@ body {
   background-color: #1c1b3a;
 }
 
-/* .title {
-  margin-right: 10pt;
-  margin-left: 10pt;
-  margin-top: 10pt;
-  margin-bottom: 0pt;
-  background-color: #1c1b3a;
-  text-decoration: none;
-} */
-
 .card-body {
   background-color: #1c1b3a;
 }
@@ -57,30 +48,7 @@ body {
   width: 100%;
   display: flex;
 }
-/* .col-sm-3 {
-  height: 100vh;
-  width: 20%;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #1c1b3a;
-} */
 
-/* .col-sm-9 {
-  height: 100vh;
-  width: 80%;
-  background-color: rgb(241, 238, 238);
-  display: flex;
-  position: relative;
-  overflow-y: hidden;
-  flex-direction: column;
-  overflow-x: hidden;
-} */
-*/
-/* .dataset {
-  cursor: pointer;
-} */
 .dataset-icon {
   border-radius: 5px;
   background-color: rgb(113, 116, 114);
@@ -96,20 +64,9 @@ body {
   width: 90%;
 }
 
-/* js-plotly-plot .plotly {
-  position: relative;
-  height: 450px;
+.js-plotly-plot .plotly .cursor-ew-resize {
+  cursor: crosshair !important;
 }
-.svg-container {
-  position: relative;
-  height: 450px;
+.js-plotly-plot .plotly .cursor-ew-resize:active:hover {
+  cursor: ew-resize !important;
 }
-
-.main-svg {
-  position: relative;
-  height: 450px;
-}
-.plot-container {
-  position: relative;
-  height: 450px;
-} */
