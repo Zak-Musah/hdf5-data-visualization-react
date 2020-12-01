@@ -30,7 +30,12 @@ measurement - floats, size NxW, with N - number of data samples, W - number of w
 
 glucose - floats, size Nx1, with N - number of data samples, consists of glucose values that were calculated based on corresponding measurement spectra.
 
-The goal of this task is to programmaticaly extract data from files and plot two graphs. One graph should contain glucose over time and the second, the corresponding measurement.
+The goal of this task is to programmaticaly extract data from files and plot two graphs. One graph should contain glucose data points and the second, the corresponding spectrum.
+
+## Demo
+
+Check out the live app, running on Netlify:
+[Demo](https://irubis-dashboard.netlify.app/)
 
 # [📖 Docs]
 
@@ -128,6 +133,7 @@ npm start [Automatically launches app in your default browser on http://localhos
 - react-bootstrap v1.4.0 - For app CSS styling and loading spinner
 - React-PlotlyJS/PlotlyJS v2.4.0/1.45.3 - For charts shown on dashboard
 - Enzyme v3.9.0 - Utility library used for testing react components
+- react-fontawesome v0.1.13 - For light/dark mode icon
 
 # EndPoints
 
@@ -135,23 +141,24 @@ You can test out the following endpoints:
 
 ```
 
-   Endpoint           HTTP Method     CRUD Method      Result
-    /                     GET            READ            Load React App
-    /api/test             GET            READ            Sanity Check
-    /api/get_file_names   GET            READ            Get file names
-    /api/read_data        POST           READ            Get data from file
+   Endpoint                 HTTP Method     CRUD Method      Result
+    /                           GET            READ            Load React App
+    /api/test                   GET            READ            Sanity Check
+    /api/get_file_names         GET            READ            Get file names
+    /api/get_glucose_data       POST           READ            Get Glucose data from file
+    /api/get_measurement_data   POST           READ            Get measurement data from file
 ```
 
 # Screenshots
 
 ## When App First Renders
 
-![Image](screenshots/1.png?raw=true "1")
 
-## Dataset-1
+### Choose data file and follow steps to see glucose and corresponding spectra as shown in Results
 
-![Image](screenshots/2.png?raw=true "2")
+![Image](Screenshots/1.png?raw=true "1")
 
-## Dataset-2
+## Results
 
-![Image](screenshots/3.png?raw=true "3")
+![Image](Screenshots/2.png?raw=true "2")
+
