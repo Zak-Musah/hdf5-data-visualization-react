@@ -153,6 +153,7 @@ You can test out the following endpoints:
 
 ## When App First Renders
 
+
 ### Choose data file and follow steps to see glucose and corresponding spectra as shown in Results
 
 ![Image](Screenshots/1.png?raw=true "1")
@@ -160,3 +161,4 @@ You can test out the following endpoints:
 ## Results
 
 ![Image](Screenshots/2.png?raw=true "2")
+
