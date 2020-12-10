@@ -1,17 +1,16 @@
 <p align="center" style="color: #343a40">
-  <h1 align="center">HDF5 Data Visualization</h1>
+  <h1 align="center">HDF5 Data Visualization - ReactJS and Python</h1>
 </p>
-<p align="center" style="font-size: 1.2rem;">IRUBIS HDF5 files visualized in react programmatically</p>
+<p align="center" style="font-size: 1.2rem;">A data pipeline built with python as backend for data wrangling and reactjs for visualization</p>
 
 [![npm version](https://badge.fury.io/js/react.svg)](https://badge.fury.io/js/react)
 [![Python 3.8](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/downloads/release/python-360/)
 
 This HDF5 visualization project written with Flask web framework(Python) as backend and React (Javascript) as frontend is served in Docker containers. HDF5 format is a hierarchical data structure, consists mainly of the following components: attributes, groups and data sets. Attributes are used for storing meta-data. Groups and data sets could be considered as folders and files, respectively, in classical file system - https://en.wikipedia.org/wiki/Hierarchical_Data_Format.
 
-Structure of IRUBIS HDF5 files Attributes:
+Structure of HDF5 files Attributes used in this project:
 
 - wavenumbers, array: Wx1, with W - number of data samples
-  From here you can extract wavenumbers, which are commonly used as x-axis (horizontal) for plotting spectra.
 
 Groups:
 
@@ -30,12 +29,14 @@ measurement - floats, size NxW, with N - number of data samples, W - number of w
 
 glucose - floats, size Nx1, with N - number of data samples, consists of glucose values that were calculated based on corresponding measurement spectra.
 
-The goal of this task is to programmaticaly extract data from files and plot two graphs. One graph should contain glucose data points and the second, the corresponding spectrum.
+when the Frontend first renders, data is programmatically loaded from the dataset folder and immediately available to the frontend.
+There is the possibility to choose one or two files for comparison.
+The first graph should contain glucose data points. Onclick of a data point in the first graph plots the corresponding spectrum in the second graph.
 
 ## Demo
 
 Check out the live app, running on Netlify:
-[Demo](https://irubis-dashboard.netlify.app/)
+[Demo](https://hdf5-dashboard.netlify.app/)
 
 # [📖 Docs]
 
