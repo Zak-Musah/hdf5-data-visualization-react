@@ -156,8 +156,8 @@ You can test out the following endpoints:
 
 ### Choose data file and follow steps to see glucose and corresponding spectra as shown in Results
 
-![Image](Screenshots/1.png?raw=true "1")
+![Image](screenshots/1.png?raw=true "1")
 
 ## Results
 
-![Image](Screenshots/2.png?raw=true "2")
+![Image](screenshots/2.png?raw=true "2")
