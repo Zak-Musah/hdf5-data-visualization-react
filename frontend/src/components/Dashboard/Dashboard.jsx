@@ -180,7 +180,7 @@ function Dashboard(props) {
 
   return (
     <>
-      <div className="col-3 bg-violet card">
+      <div className="col-xs-6 col-md-3 col-sm-4  bg-violet card">
         <div className="card-body">
           <div className="list-group">
             <OverlayTrigger
@@ -249,7 +249,7 @@ function Dashboard(props) {
           )}
         </div>
       </div>
-      <div className="col bg-light card">
+      <div className="col-xs-6  col-md-9 col-sm-8 bg-light card">
         <div className="card-body" style={{ paddingLeft: "4%" }}>
           {loading && (
             <center>

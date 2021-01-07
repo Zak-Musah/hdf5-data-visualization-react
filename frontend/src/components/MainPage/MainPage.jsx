@@ -10,7 +10,8 @@ function MainPage() {
           <h2 style={{ color: "white" }}>HDF5 DASHBOARD</h2>
         </a>
       </nav>
-      <div className="row">
+
+      <div className="row" style={{ overflowY: "auto" }}>
         <Dashboard />
       </div>
     </>
